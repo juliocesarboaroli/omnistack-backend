@@ -24,17 +24,22 @@ mongoose.connect('mongodb+srv://omnistack:omnistack@cluster0-bhrny.mongodb.net/o
 app.use((req, res, next) => {
     req.io = io;
     // Para fazer a requisição passar deste middleware para sua rota correta
-    return next;
+    return next();
 });
 
 // Todos podem acessar minha aplicação e consultar os recursos dela
 app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Para envio de arquivos
 
 // Quando acessar /files devo buscar os arquivos físicos presentes em tmp
 app.use('/files', express.static(path.resolve(__dirname, '..', 'tmp')));
+app.use('/', (req, res, next) => {
+    return next();
+});
 
 app.use(require('./routes'));
 
-server.listen(process.env.PORT || 3333);
+server.listen(3333);
+console.log('Ouvindo na porta ' + process.env.PORT || 3333);
