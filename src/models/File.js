@@ -18,7 +18,8 @@ const File = new mongoose.Schema({
 // Campo virtual == existe somente no backend, no banco não [Transient]
 // function não pode ser arrow, pois precisamos acessar o this da nossa instância de file
 File.virtual('url').get(function() {
-    return `http://localhost:3333/files/${encodeURIComponent(this.path)}`;
+    const url = process.env.URL || 'http://localhost:3333';
+    return `${url}/files/${encodeURIComponent(this.path)}`;
 });
 
 module.exports = mongoose.model('File', File);
